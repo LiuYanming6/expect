@@ -1,0 +1,4 @@
+#!/bin/sh
+
+echo $PWD
+co6_ftp.sh db12x-squashfs vmlinux.lzma.uImage

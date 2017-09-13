@@ -1,0 +1,21 @@
+#!/bin/bash
+if [ $# -ne 2 ];then
+	echo $0 channel num万 
+	exit 1
+fi
+num=$2
+for a in `seq 0 9`;do 
+for c in `seq 0 9`;do 
+	for b in `seq 0 9`;do
+		echo "./defpkt -s $a$c${b}"
+		./defpkt -s aa:bb:c${a}:${c}${b}:ee:ff -f mon0 -t 10000 -C ssid -x 10000 -c $1
+		if [ $? -ne 0 ];then
+			echo "wrong"
+		fi
+		((num--))
+		if [ $num -eq 0 ];then
+			exit 0
+		fi
+	done
+	done
+done

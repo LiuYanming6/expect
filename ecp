@@ -1,0 +1,27 @@
+#!/bin/bash
+num=1
+desdir=/home/$USER/tftproot
+if [ $# -ne 0 ];then
+    num=$1
+fi
+
+time=`date "+%m.%d"`
+
+if [ ! -d ~/tftproot/0.02/ ];then
+    mkdir -p ~/tftproot/0.02
+    mkdir ~/tftproot/old
+fi
+if [ ! -d ~/tftproot/0.02/00 ];then
+    curlftpfs ftp://liuyanming:y2m8d7a9@10.0.0.2 ~/tftproot/0.02
+fi
+
+cd ~/tftproot/0.02/00/
+for file in $(ls  -t | head -${num});do
+    mv $desdir/$file $desdir/old/${file}_$time
+    cp -Rpf $file $desdir
+    #    $(ll $file)
+    ls -lh ${desdir}/${file}
+    md5sum ${desdir}/${file}
+    chmod 777 ${desdir}/${file}
+done
+#umount /mnt/02/

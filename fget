@@ -1,0 +1,11 @@
+#!/bin/sh
+cd ~/tftproot
+
+time=`date "+%m.%d"`
+dir=00
+mv $1 $1_$time
+echo $1
+mftp $dir $1
+chmod 777 ./$1
+
+#service tftpd-hpa restart

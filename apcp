@@ -1,0 +1,8 @@
+#!/usr/bin/expect
+
+set file [lindex $argv 0]
+set ip [lindex $argv 1]
+
+spawn "scp" $file root@$ip:/tmp/
+expect "password:"
+send "5up\n"

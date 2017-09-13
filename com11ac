@@ -1,0 +1,31 @@
+#!/usr/bin/expect
+
+#spawn killall minicom
+#spawn sleep 1
+spawn minicom
+#interact
+send "\n"
+#expect "#"
+#send "reboot\n"
+#expect "autoboot:  2"
+#send "\002"
+expect "ath>"
+send "setenv bootargs console=ttyS0,115200 root=31:03 rootfstype=squashfs init=/sbin/init mtdparts=ath-nor0:256k(u-boot)ro,64k(u-boot-env),64k(board),6656k(rootfs0),1m(uImage0),6656k(rootfs1),1m(uImage1),448k(config),64k(exception),64k(log),64k(ART),7680k@384k(FMW0),7680k@8064k(FMW1)\n"
+expect "ath>"
+send "setenv serverip 10.0.1.223\n"
+expect "ath>"
+send "setenv ipaddr  10.0.1.103\n"
+expect "ath>"
+send "set bootcmd bootm 0x9f6e0000\n"
+expect "ath>"
+send "save\n"
+expect "ath>"
+send "printenv\n"
+expect "ath>"
+send "tftp 0x80060000 ap143-squashfs && erase 0x9f060000 +0x680000 && cp.b 0x80060000 0x9f060000 \${filesize}\n"
+expect "ath>"
+send "tftp 0x80060000 vmlinux.lzma.uImage && erase 0x9f6e0000 +0x100000 && cp.b 0x80060000 0x9f6e0000 \${filesize}\n"
+expect "ath>"
+send "boot\n"
+interact
+

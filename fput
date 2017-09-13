@@ -1,0 +1,11 @@
+#!/bin/sh
+#ftpput -u caodi -p 123456 10.0.1.99 $1
+#cp $1 ~/tftproot
+
+#dir=`date "+%m.%d"`
+time=`date "+%W.%d.%H.%M.%S"`
+dir=00
+
+echo $1
+ftpput $dir $time $1
+

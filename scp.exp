@@ -1,0 +1,10 @@
+#!/usr/bin/expect
+
+set file [lindex $argv 0]
+set ip [lindex $argv 1]
+
+spawn scp  $file root@$ip:/tmp/
+set pass "5up"
+expect {
+    password: {send "$pass\r"; exp_continue}
+}

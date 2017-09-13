@@ -1,0 +1,74 @@
+#!/usr/bin/env python3
+
+import pexpect
+import sys
+
+if __name__ == "__main__":
+    '''
+    if sys.argv[1:]:
+        cmdstr = "telnet " + sys.argv[1]
+    else:
+        print('need ip');
+    exit()
+    '''
+    #pexpect.spawn("killall minicom")
+    child = pexpect.spawn("minicom")
+    child.sendline()
+    i = child.expect([pexpect.TIMEOUT, "#", 'login', 'ar7240>'])       
+    if i == 0: # Timeout                                
+        print('star 000000000 ')
+        print('ERROR! could not login with SSH. Here is what SSH said:')
+        print(child.before, child.after)                
+        print(str(child))                               
+        print('end 000000000 ')
+        sys.exit (1) 
+    # 有个问题这里会遇到 “ap mips #1 ”
+    if i == 1: # In this case SSH does not have the public key cached.
+        print('star 1111111 ')
+        child.sendline("reboot")
+        child.expect('Hit Ctrl+B to stop autoboot:*')
+        child.sendcontrol('b')
+        print('end 111111 ')
+    if i == 2:                                          
+        print('star 22222222 ')
+        child.expect('login:')
+        child.sendline("root")
+        child.expect('Password:')
+        child.sendline("5up")
+        child.sendline("reboot")
+        child.expect('Hit Ctrl+B to stop autoboot:*')
+        print('end 22222222 ')
+    if i == 3:
+        print('start 33333 ')
+        print('end 33333 ')
+
+    print('start ')
+    #child.expect("ar7240>")
+    child.sendline("setenv serverip 10.0.1.223")
+    child.sendline()
+    child.expect("ar7240>")
+    child.sendline("setenv bootargs console=ttyS0,115200 root=31:03 rootfstype=squashfs init=/sbin/init mtdparts=ath-nor0:256k(u-boot)ro,64k(u-boot-env),64k(board),6656k(rootfs0),1m(uImage0),6656k(rootfs1),1m(uImage1),448k(config),64k(exception),64k(log),64k(ART),7680k@384k(FMW0),7680k@8064k(FMW1)")
+    child.sendline()
+    child.expect("ar7240>")
+    child.sendline("setenv ipaddr  10.0.1.103")
+    child.sendline()
+    child.expect("ar7240>")
+    child.sendline("set bootcmd bootm 0x9f6e0000")
+    child.sendline()
+    child.expect("ar7240>")
+    child.sendline("save")
+    child.sendline()
+    child.expect("ar7240>")
+    child.sendline("tftp 0x80060000 db12x-squashfs && erase 0x9f060000 +0x680000 && cp.b 0x80060000 0x9f060000 ${filesize}")
+    child.sendline()
+    child.expect("ar7240>")
+    child.sendline("tftp 0x80060000 vmlinux.lzma.uImage && erase 0x9f6e0000 +0x100000 && cp.b 0x80060000 0x9f6e0000 ${filesize}")
+    child.sendline()
+    child.expect("ar7240>")
+    child.sendline("tftp 0x80060000 config-db12x && erase 0x9ff60000 +0x070000 && cp.b 0x80060000 0x9ff60000 ${filesize}")
+    child.sendline()
+    child.expect("ar7240>")
+    child.sendline("boot")
+    child.sendline()
+    child.interact()
+

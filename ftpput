@@ -1,0 +1,21 @@
+#!/usr/bin/expect
+
+set dir [lindex $argv 0]
+set time [lindex $argv 1]
+set file [lindex $argv 2]
+spawn ftp 10.0.0.2
+expect "liuyanming):"
+send "liuyanming\n"
+expect "Password:"
+send "y2m8d7a9\n"
+expect "ftp>"
+send "mkdir $dir\n"
+expect "ftp>"
+send "cd $dir\n"
+expect "ftp>"
+send "rename $file $time\n"
+expect "ftp>"
+send "put $file\n"
+expect "ftp>"
+send "exit\n"
+expect "bye."

@@ -1,0 +1,11 @@
+#!/usr/bin/expect
+
+set ip [lindex $argv 0]
+#set time [lindex $argv 1]
+#set file [lindex $argv 2]
+spawn telnet $ip
+expect "login:"
+send "root\n"
+expect "assword:"
+send "5up\n"
+interact

@@ -1,0 +1,12 @@
+
+1. ap cmd
+iwlist wlan0 channel	#look ap channel
+cd /tmp
+tftp -gr mac1ap x.x.x.x 
+chmod 777 ./mac1ap
+./mac1ap
+
+2. 使用
+sudo service NetworkManager stop
+sudo airmon-ng start wlan0
+sudo ./macsend 6 150	#./macsend channel wan

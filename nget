@@ -1,0 +1,16 @@
+#!/bin/sh
+time=`date "+%m.%d"`
+desdir=/home/liu/tftproot
+
+#mkdir /tmp/ftpsession
+#curlftpfs ftp://liuyanming:y2m8d7a9@10.0.0.2 /tmp/ftpsession
+cd /home/liu/tftproot/0.02/00/
+for file in $(ls -t | head -$1);do
+    mv $desdir/$file $desdir/${file}_$time
+    cp -Rpf $file $desdir
+    echo ${file}
+    #`ls ${desdir}/${file}`
+done
+#cd -
+#umount /tmp/ftpsession
+
